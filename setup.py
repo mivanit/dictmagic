@@ -1,17 +1,16 @@
 import setuptools
 
+from dictmagic import __version__,__description__
+
 with open("README.md", "r", encoding="utf-8") as fr:
     long_description = fr.read()
 
-with open("version", "r", encoding="utf-8") as fv:
-    version = fv.read().strip()
-
 setuptools.setup(
     name="dictmagic-mivanit",
-    version=version,
+    version=__version__,
     author="mivanit",
     author_email="miv@knc.ai",
-    description="a package that makes it easier to do weird things with python dictionaries",
+    description=__description__,
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/mivanit/dictmagic",
