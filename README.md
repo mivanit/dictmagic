@@ -36,3 +36,9 @@ originally developed by @mivanit for a config manager, then moved to [knc-tools]
 
 PRs and feature requests welcome!
 
+## building
+to build the package:
+(you probably don't need to do this unless you're uploading a fork to PyPI)
+```
+python setup.py sdist bdist_wheel
+```

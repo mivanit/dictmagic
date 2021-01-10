@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fr:
     long_description = fr.read()
 
 setuptools.setup(
-    name="dictmagic-mivanit",
+    name="dictmagic",
     version=__version__,
     author="mivanit",
     author_email="miv@knc.ai",
