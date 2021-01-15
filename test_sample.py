@@ -1,9 +1,10 @@
+from typing import Type
 import unittest
 import dictmagic
 
 class TestDictmagic(unittest.TestCase):
 
-	def testing_basic(self):
+	def basic(self):
 		
 		original = {
 			'a' : 1,
@@ -34,7 +35,7 @@ class TestDictmagic(unittest.TestCase):
 		self.assertEqual(str(original), str(dictmagic.unflatten(flat_expected)))
 
 
-	def testing_duplication(self):
+	def duplication(self):
 		
 		for dup_key_repl in ['None', '', '_']:
 			dupeDict_flat = { 'a' : 'val1', 'a/b' : 'val2' }
@@ -49,7 +50,7 @@ class TestDictmagic(unittest.TestCase):
 
 			self.assertEqual(str(dupeDict_unflat), str(test_unflat))
 		
-	def testing_duplication_except(self):
+	def duplication_except(self):
 		
 		for dup_key_repl in [None, 'None', '', '_', -1]:
 			dupeDict_flat = { 'a' : 'val1', 'a/b' : 'val2' }
@@ -60,6 +61,45 @@ class TestDictmagic(unittest.TestCase):
 				self.assertTrue(False, 'did not except on duplicate!')
 			except KeyError:
 				pass
+
+	
+	def nonstring_keys(self):
+		original = {
+			1010101 : 1,
+			(1,1,2,3,5,8) : 2,
+			'c' : {
+				'x' : 42,
+				'y' : 'a string',
+				'z' : {
+					None : [1, 2, 3],
+					'qwerty' : 3.1415,
+				}
+			},
+		}
+
+		flat_expected = {
+			'1010101' : 1,
+			'(1,1,2,3,5,8)' : 2,
+			'c/x' : 42,
+			'c/y' : 'a string',
+			'c/z/None' : [1, 2, 3],
+			'c/z/qwerty' : 3.1415,
+		}
+
+		# when no exception
+		flattened_noexcept = dictmagic.flatten(original, except_nonstr_key = False)
+		self.assertEqual(str(flattened_noexcept), str(flat_expected))
+
+		# reverting to unflattened would not work
+		# if this feature is needed, probably import a safe YAML parser or something
+
+		try:
+			flattened_except = dictmagic.flatten(original, except_nonstr_key = True)
+
+			self.assertTrue(False, 'did not except on duplicate!')
+		except TypeError:
+			pass
+
 
 
 if __name__ == "__main__":
