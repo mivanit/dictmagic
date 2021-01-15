@@ -27,7 +27,7 @@ def flatten(
 		except_nonstr_key (bool, optional): if True, raise exception if non-string key found. If False, converts key to string and proceeds. Defaults to True.
 
 	Returns:
-		dict: [description]
+		dict: flattened dictionary
 
 	Raises:
 		TypeError: if non-string key found (including in dup_key_repl)
