@@ -8,9 +8,6 @@ pip install dictmagic
 ```
 
 
-## contents
-[TOC]
-
 # Usage
 ## using `dictmagic.paths`
 flattening and unflattening hierarchies of dicts lets you access `mydict['hello']['world']` with `mydict['hello/world']` or vice versa. This is useful in contexts where having nested dicts is not practical (making hash maps that can be used in strictly typed languages, storing data in hdf5 attributes, etc)
