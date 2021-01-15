@@ -36,12 +36,16 @@ class TestDictmagic(unittest.TestCase):
 
 	def testing_duplication(self):
 		
-		for dup_key_repl in [None, 'None', '', '_', -1]:
+		for dup_key_repl in ['None', '', '_']:
 			dupeDict_flat = { 'a' : 'val1', 'a/b' : 'val2' }
 
 			dupeDict_unflat = { 'a' : { dup_key_repl : 'val1', 'b' : 'val2' } }
 
-			test_unflat = dictmagic.unflatten(dupeDict_flat, dup_key_repl = dup_key_repl)
+			test_unflat = dictmagic.unflatten(
+				dupeDict_flat,
+				except_dup_key = False,
+				dup_key_repl = dup_key_repl,
+			)
 
 			self.assertEqual(str(dupeDict_unflat), str(test_unflat))
 		
