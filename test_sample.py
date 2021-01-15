@@ -24,7 +24,7 @@ class TestDictmagic(unittest.TestCase):
 			'c/x' : 42,
 			'c/y' : 'a string',
 			'c/z/asdf' : [1, 2, 3],
-			'c/z/qwert' : 3.1415,
+			'c/z/qwerty' : 3.1415,
 		}
 
 		flattened = dictmagic.flatten(original)
