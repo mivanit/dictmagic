@@ -10,6 +10,20 @@ or vice versa
 """
 
 def flatten(in_dict : dict, sep : str = '/') -> dict:
+	"""flatten a dictionary
+
+	takes dictionary with structure
+		mydict['hello']['world']
+	and maps that to a flattened dict:
+		mydict['hello/world']
+
+	Args:
+		in_dict (dict): input (nested) dictionary
+		sep (str, optional): separator between nested dicts. Defaults to '/'.
+
+	Returns:
+		dict: [description]
+	"""
 	output = dict()
 
 	for key,val in in_dict.items():
@@ -22,18 +36,55 @@ def flatten(in_dict : dict, sep : str = '/') -> dict:
 	return output
 
 
-def unflatten(in_dict, sep = '/') -> dict:
+def unflatten(
+		in_dict,
+		sep = '/',
+		except_dup_key = False,
+		dup_key_repl = None,
+	) -> dict:
+	"""unflatten a nested dictionary
+
+	Args:
+		in_dict ([type]): unput dictionary
+		sep (str, optional): separator between nested paths in `in_dict`. Defaults to '/'.
+		except_dup_key (bool, optional): if True, raise exception if a duplicate key is found. Defaults to False.
+		dup_key_repl ([type], optional): if exception is not raised, map duplicate to this value:
+				if `D` contains
+					{ 'a' : 'val1', 'a/b' : 'val2' }
+				then `unflatten(D)` will have
+					{ 'a' : { dup_key_repl : 'val1', 'b' : 'val2' } }
+			Defaults to None.
+
+	Raises:
+		KeyError: if except_dup_key is True, raises key error when duplicate key found
+
+	Returns:
+		dict: nested dictionary
+	"""
 	output = dict()
 	
 	for key,val in in_dict.items():
 		splitKey = key.split(sep, 1)
 		if len(splitKey) == 1:
 			# if first level
-			output[splitKey[0]] = val
+			if splitKey[0] in output:
+				if except_dup_key:
+					raise KeyError('duplicate key')
+				output[splitKey[0]].update({dup_key_repl : val})
+			else:
+				output[splitKey[0]] = val
 		else:
 			# if deeper
 			if splitKey[0] not in output:
 				output[splitKey[0]] = dict()
+			
+			if not isinstance(output[splitKey[0]], dict):
+				if except_dup_key:
+					raise KeyError('duplicate key')
+				# if the key already maps to something other than a dict
+				# make it map to a dict
+				oldval = output[splitKey[0]]
+				splitKey[0] = { dup_key_repl : oldval }
 
 			# map to val
 			output[splitKey[0]][splitKey[1]] = val
